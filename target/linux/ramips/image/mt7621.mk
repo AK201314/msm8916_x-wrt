@@ -148,6 +148,16 @@ define Device/dsa-migration
   DEVICE_COMPAT_MESSAGE := Config cannot be migrated from swconfig to DSA
 endef
 
+define Build/tenbay-factory
+  mkdir -p "$@.tmp"
+  mv "$@" "$@.tmp/UploadBrush-bin.img"
+  $(MKHASH) md5 "$@.tmp/UploadBrush-bin.img" | head -c32 > "$@.tmp/check_MD5.txt"
+  $(TAR) -czf "$@.tmp.tgz" -C "$@.tmp" UploadBrush-bin.img check_MD5.txt
+  $(STAGING_DIR_HOST)/bin/openssl aes-256-cbc -e -salt -in "$@.tmp.tgz" -out "$@" -k QiLunSmartWL
+  printf %32s $(1) >> "$@"
+  rm -rf "$@.tmp" "$@.tmp.tgz"
+endef
+
 define Build/xwrt_puppies-factory
   -[ -f "$@" ] && \
   mkdir -p "$@.tmp" && \
@@ -2822,6 +2832,31 @@ define Device/xzwifi_creativebox-v1
 	kmod-usb3 -wpad-basic-mbedtls -uboot-envtools
 endef
 TARGET_DEVICES += xzwifi_creativebox-v1
+
+define Device/xwrt_wr1800k-ax-nand
+  $(Device/dsa-migration)
+  $(Device/uimage-lzma-loader)
+  BLOCKSIZE := 128k
+  PAGESIZE := 2048
+  KERNEL_SIZE := 4096k
+  IMAGE_SIZE := 129408k
+  UBINIZE_OPTS := -E 5
+  IMAGES += factory.bin
+  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
+  IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | check-size
+ifneq ($(CONFIG_TARGET_ROOTFS_INITRAMFS),)
+  ARTIFACTS := initramfs-G-AX18OO-factory.bin initramfs-WR1800K-factory.bin
+  ARTIFACT/initramfs-G-AX18OO-factory.bin := append-image-stage initramfs-kernel.bin | \
+	tenbay-factory G-AX18OO
+  ARTIFACT/initramfs-WR1800K-factory.bin := append-image-stage initramfs-kernel.bin | \
+	tenbay-factory WR1800K
+endif
+  DEVICE_VENDOR := XWRT
+  DEVICE_MODEL := WR1800K-AX
+  DEVICE_VARIANT := NAND
+  DEVICE_PACKAGES := kmod-mt7915-firmware
+endef
+TARGET_DEVICES += xwrt_wr1800k-ax-nand
 
 define Device/xwrt_t-cpe1200k-v01
   $(Device/uimage-lzma-loader)
