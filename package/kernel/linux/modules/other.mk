@@ -1341,7 +1341,9 @@ define KernelPackage/mhi-bus
   TITLE:=MHI bus
   KCONFIG:=CONFIG_MHI_BUS \
            CONFIG_MHI_BUS_DEBUG=y
-  FILES:=$(LINUX_DIR)/drivers/bus/mhi/core/mhi.ko
+  FILES:= \
+  $(LINUX_DIR)/drivers/bus/mhi/core/mhi.ko@lt5.18 \
+  $(LINUX_DIR)/drivers/bus/mhi/host/mhi.ko@ge5.18
   AUTOLOAD:=$(call AutoProbe,mhi)
 endef
 
@@ -1356,7 +1358,9 @@ define KernelPackage/mhi-pci-generic
   TITLE:=MHI PCI controller driver
   DEPENDS:=@PCI_SUPPORT +kmod-mhi-bus
   KCONFIG:=CONFIG_MHI_BUS_PCI_GENERIC
-  FILES:=$(LINUX_DIR)/drivers/bus/mhi/mhi_pci_generic.ko
+  FILES:= \
+  $(LINUX_DIR)/drivers/bus/mhi/mhi_pci_generic.ko@lt5.18 \
+  $(LINUX_DIR)/drivers/bus/mhi/host/mhi_pci_generic.ko@ge5.18
   AUTOLOAD:=$(call AutoProbe,mhi_pci_generic)
 endef
 
