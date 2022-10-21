@@ -1455,7 +1455,7 @@ define KernelPackage/wwan
 endef
 
 define KernelPackage/wwan/description
- his driver provides a common framework for WWAN drivers.
+ This driver provides a common framework for WWAN drivers.
 endef
 
 $(eval $(call KernelPackage,wwan))
