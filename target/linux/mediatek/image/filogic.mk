@@ -229,3 +229,25 @@ ifneq ($(CONFIG_TARGET_ROOTFS_INITRAMFS),)
 endif
 endef
 TARGET_DEVICES += xiaomi_redmi-router-ax6000-ubootmod
+
+define Device/tenbay_ac-2210e
+  DEVICE_VENDOR := Tenbay
+  DEVICE_MODEL := AC-2210E
+  DEVICE_DTS := mt7981-tenbay_ac-2210e
+  DEVICE_DTS_DIR := ../dts
+  DEVICE_PACKAGES := kmod-mdio-gpio kmod-i2c-gpio i2c-tools
+  SUPPORTED_DEVICES := tenbay,ac-2210e
+  UBINIZE_OPTS := -E 5
+  BLOCKSIZE := 128k
+  PAGESIZE := 2048
+  IMAGE_SIZE := 65536k
+  KERNEL_IN_UBI := 1
+  IMAGES += factory.bin
+  IMAGE/factory.bin := append-ubi | check-size $$$$(IMAGE_SIZE)
+  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
+  KERNEL = kernel-bin | lzma | \
+	fit lzma $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb
+  KERNEL_INITRAMFS = kernel-bin | lzma | \
+	fit lzma $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb with-initrd
+endef
+TARGET_DEVICES += tenbay_ac-2210e
