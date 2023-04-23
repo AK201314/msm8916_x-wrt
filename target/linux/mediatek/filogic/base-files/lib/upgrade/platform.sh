@@ -38,6 +38,11 @@ redmi_ax6000_initial_setup()
 	fw_setenv mtdparts "nmbm0:1024k(bl2),256k(Nvram),256k(Bdata),2048k(factory),2048k(fip),256k(crash),256k(crash_log),30720k(ubi),30720k(ubi1),51200k(overlay)"
 }
 
+tenbay_mmc_do_upgrade_dual_boot()
+{
+	:
+}
+
 platform_do_upgrade() {
 	local board=$(board_name)
 
@@ -78,6 +83,9 @@ platform_do_upgrade() {
 		CI_KERN_UBIPART=ubi_kernel
 		CI_ROOT_UBIPART=ubi
 		nand_do_upgrade "$1"
+		;;
+	tenbay,wr3000k-gsw-emmc-nor)
+		tenbay_mmc_do_upgrade_dual_boot "$1"
 		;;
 	*)
 		nand_do_upgrade "$1"
