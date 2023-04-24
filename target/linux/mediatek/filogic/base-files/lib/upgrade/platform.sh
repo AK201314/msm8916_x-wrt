@@ -43,6 +43,18 @@ tenbay_mmc_do_upgrade_dual_boot()
 	:
 }
 
+tenbay_dualboot_fixup()
+{
+	[ "$(rootfs_type)" = "tmpfs" ] || return 0
+
+	if ! fw_printenv -n boot_from &>/dev/null; then
+		echo "unable to read uboot-env"
+		return 1
+	fi
+
+	fw_setenv boot_from ubi
+}
+
 platform_do_upgrade() {
 	local board=$(board_name)
 
@@ -136,6 +148,9 @@ platform_pre_upgrade() {
 	case "$board" in
 	xiaomi,redmi-router-ax6000-stock)
 		redmi_ax6000_initial_setup
+		;;
+	tenbay,wr3000k)
+		tenbay_dualboot_fixup
 		;;
 	esac
 }
