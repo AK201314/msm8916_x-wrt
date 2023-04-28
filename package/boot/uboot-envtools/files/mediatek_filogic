@@ -53,6 +53,7 @@ xiaomi,redmi-router-ax6000-ubootmod)
 	ubootenv_add_uci_config "$envdev" "0x0" "0x1f000" "0x20000" "1"
 	ubootenv_add_uci_config "$envdev2" "0x0" "0x1f000" "0x20000" "1"
 	;;
+tenbay,ac-2205ex|\
 tenbay,wr3000k)
 	ubootenv_add_uci_config "/dev/mtd1" "0" "0x20000" "0x20000" 1
 	;;
