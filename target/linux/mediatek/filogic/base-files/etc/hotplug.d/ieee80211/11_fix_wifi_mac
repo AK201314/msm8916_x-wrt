@@ -29,4 +29,10 @@ case "$board" in
 	tplink,tl-xdr6088)
 		[ "$PHYNBR" = "0" ] && get_mac_label > /sys${DEVPATH}/macaddress
 		;;
+	qihoo,360t7)
+		lan_mac=$(mtd_get_mac_ascii stock-factory lanMac)
+		addr=$(macaddr_add $lan_mac 2)
+		[ "$PHYNBR" = "0" ] && macaddr_unsetbit $addr 6 > /sys${DEVPATH}/macaddress
+		[ "$PHYNBR" = "1" ] && macaddr_setbit $addr 6 > /sys${DEVPATH}/macaddress
+		;;
 esac

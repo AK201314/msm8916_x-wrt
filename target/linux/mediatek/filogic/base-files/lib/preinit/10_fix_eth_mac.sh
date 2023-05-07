@@ -8,6 +8,10 @@ preinit_set_mac_address() {
 		ip link set dev eth0 address "$addr"
 		ip link set dev eth1 address "$addr"
 		;;
+	qihoo,360t7)
+		lan_mac=$(mtd_get_mac_ascii stock-factory lanMac)
+		ip link set dev eth0 address "$lan_mac"
+		;;
 	esac
 }
 
