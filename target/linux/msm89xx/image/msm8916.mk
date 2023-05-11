@@ -30,4 +30,12 @@ define Device/openstick-ufi103s
 endef
 TARGET_DEVICES += openstick-ufi103s
 
+define Device/openstick-mf32
+  $(Device/openstick-ufi001c)
+  DEVICE_MODEL := OpenStick MF32
+  DEVICE_DTS := msm8916-ufi-mf32
+  DEVICE_PACKAGES := wpad-basic-wolfssl qcom-msm8916-modem-openstick-mf32-firmware qcom-msm8916-openstick-mf32-wcnss-firmware qcom-msm8916-wcnss-openstick-mf32-nv
+endef
+TARGET_DEVICES += openstick-mf32
+
 endif
