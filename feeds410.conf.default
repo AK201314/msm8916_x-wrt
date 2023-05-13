@@ -8,4 +8,4 @@ src-git-full x https://github.com/x-wrt/com.x-wrt.git
 #src-git-full oldpackages http://git.openwrt.org/packages.git
 #src-link custom /usr/src/openwrt/custom-feed
 
-src-git-full openstick https://github.com/aa889788/openstick-feeds.git
+src-git-full openstick https://github.com/AK201314/openstick-feeds.git
